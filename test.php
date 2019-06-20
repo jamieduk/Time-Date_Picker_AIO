@@ -16,8 +16,9 @@ A {color:#444444}
 
 
 <?php
-include_once("../../tracker.php");
-include_once("../../headerb.php"); ?>
+//include_once("../../tracker.php");
+//include_once("../../headerb.php");
+?>
 <p><br><br><p><br><p>
 
 
@@ -48,6 +49,84 @@ error_reporting(E_ALL);
         </style>
     </head>
     <body>
+<center>
+
+
+        <input type="time" value="01:30" min="0:00" max="18:02">
+
+        <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/jquery.clockinput.css">
+        <script type="text/javascript" src="js/jquery.clockinput.js"></script>
+        <script type="text/javascript">
+            $("input[type=time]").clockInput(false);
+        </script>
+
+<?php
+
+if(isset($_POST['submit'])) {
+$persinfo=preg_replace('#[^a-z0-9 :._]#i', '', $_POST['persinfo']);
+$sql="UPDATE alarm_email SET details='$persinfo', date='$persinfo1' WHERE username ='$u'";
+$query=mysqli_query($db_conx, $sql);
+session_start();
+$_SESSION["Saved"]='success';
+echo "<center>Your Future Email Alarm Has Been Updated!<br />";
+header("location: user.php?u=".$_SESSION["username"]);
+} else {
+// Update failed!
+echo "Failed To Update!";
+}
+
+$numrows='0';
+$res='';
+
+$sql="SELECT * FROM alarm_email WHERE username ='$u' LIMIT 1";
+$user_query=mysqli_query($db_conx, $sql);
+mysqli_store_result($db_conx);
+$numrows=mysqli_num_rows($user_query);
+if ($numrows < 1) {
+
+$res  ='<p> ';
+$res  .= 'No Reminders Set For Future Reminder Emails!';
+} else {
+while ($row=mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
+$rid=$row["id"];
+$username=$row["username"];
+$details=$row["reminder_details"];
+$date=$row["date"];
+$time=$row["time"];
+}
+$res ='<p>';
+$res .= "$username";
+$res .= '<p>';
+$res .= "$date";
+$res .= '<p>';
+$res .= "$time";
+$res .= '<p>';
+$res .= "$details";
+}
+echo $res;
+
+?>
+<center><p><br><p>
+<script>
+$("button").click(function() {
+    $(inputselector).datepicker('show');
+
+
+});
+</script>
+
+<button id="button">Set</button>
+
+<form action='Set_Future_Reminder.php' method='POST'>
+Add/Edit Future Email Reminder<br /> 
+<input type='text' name='persinfo' size='50' placeholder='Example: Remeber this event'></input>
+<br />
+<a href='index.php'><input type='button' value='Back'></a>
+<input type='submit' name='submit' value='Update Reminder'></form>
+</center>
+</div>
+
 <center>
 
 
