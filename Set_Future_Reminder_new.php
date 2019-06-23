@@ -63,7 +63,21 @@ font: 14px monospace;
 <input type="text" name="date1" id="date1" alt="date" class="IP_calendar" title="d/m/Y" required="required"><p>
  
 <h1>Select A Time</h1>
-<input type="time" id="time" name="time" value="01:30" required="required"><center>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/style2.css" rel="stylesheet">
+    <link href="css/timepicki.css" rel="stylesheet">
+
+        <div class="inner cover indexpicker" width="50px">
+          
+	    <input id="time" type="text" name="time" width="50px"/>
+ 
+          </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/timepicki.js"></script>
+    <script>
+	$('#time').timepicki();
+    </script>
+    <script src="js/bootstrap.min.js"></script><center>
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/jquery.clockinput.css">
