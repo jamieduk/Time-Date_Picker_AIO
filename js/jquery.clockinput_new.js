@@ -1,3 +1,4 @@
+
 /**
  * @name        jquery.clockInput
  * @author      Sheng-Liang Slogar <slogar.sheng@gmail.com>
@@ -11,46 +12,46 @@
 
     // expands inputs, left padding with 0 to desired length
     function forceLength(str, len) {
-        str=str.toString();
-        var diff=len - str.length;
+        str = str.toString();
+        var diff = len - str.length;
 
-        for (var i=0; i < diff; i++)
-            str='0' + str;
+        for (var i = 0; i < diff; i++)
+            str = '0' + str;
 
         return str;
     }
 
-    $.fn.clockInput=function (DISABLE_MINUTES) {
+    $.fn.clockInput = function (DISABLE_MINUTES) {
 
         $(this).each(function () {
 
-            var MODE_HOURS=0,
-                MODE_MINUTES=1;
+            var MODE_HOURS = 0,
+                MODE_MINUTES = 1;
 
             // hide input
-            var $this=$(this);
+            var $this = $(this);
             $this.addClass("jq-ci-p");
 
             var date;
             var dateIsPM;
 
-            var hoursMax=23,
-                hoursMin=00,
-                minutesMax=59,
-                minutesMin=00;
+            var hoursMax = 23,
+                hoursMin = 00,
+                minutesMax = 59,
+                minutesMin = 00;
 
             // parse min and max attribs
             if ($this.attr("max")) {
-                var max=$this.attr("max").split(":");
+                var max = $this.attr("max").split(":");
 
-                hoursMax=Number(max[0]);
-                minutesMax=Math.round(max[1] / 5) * 5; // round to nearest 5
+                hoursMax = Number(max[0]);
+                minutesMax = Math.round(max[1] / 5) * 5; // round to nearest 5
             }
 
             if ($this.attr("min")) {
-                var min=$this.attr("min").split(":");
-                hoursMin=Number(min[0]);
-                minutesMin=Math.round(min[1] / 5) * 5; // round to nearest 5
+                var min = $this.attr("min").split(":");
+                hoursMin = Number(min[0]);
+                minutesMin = Math.round(min[1] / 5) * 5; // round to nearest 5
             }
 
             // error validation
@@ -60,7 +61,7 @@
             }
 
             // create parent
-            var $parent=$('<div>', {'class': 'jq-ci'});
+            var $parent = $('<div>', {'class': 'jq-ci'});
 
             // switch clock display to corresponding mode
             function changeMode(modeID) {
@@ -88,18 +89,18 @@
             changeMode(MODE_HOURS);
 
             // time indicator
-            var $time=$('<div>', {'class': 'jq-ci-t'});
+            var $time = $('<div>', {'class': 'jq-ci-t'});
             $parent.append($time);
 
-            var $time_h=$('<span>', {html: '--', 'class': 'jq-ci-t_h'}).click(function () {
+            var $time_h = $('<span>', {html: '--', 'class': 'jq-ci-t_h'}).click(function () {
                 changeMode(MODE_HOURS);
             });
 
-            var $time_m=$('<span>', {html: '--', 'class': 'jq-ci-t_m'}).click(function () {
+            var $time_m = $('<span>', {html: '--', 'class': 'jq-ci-t_m'}).click(function () {
                 changeMode(MODE_MINUTES);
             });
 
-            var $time_ap=$('<span>', {
+            var $time_ap = $('<span>', {
                 html: '<span>AM</span><span>PM</span>',
                 'class': 'jq-ci-t_ap'
             }).click(function () {
@@ -113,11 +114,11 @@
             function refresh(loadFromVal) {
 
                 if (loadFromVal) {
-                    var spl=$this.val().split(':');
+                    var spl = $this.val().split(':');
 
                     // validation
                     if ($.isNumeric(spl[0]) && $.isNumeric(spl[1]))
-                        date=new Date(0, 0, 0, spl[0], spl[1], 0, 0);
+                        date = new Date(0, 0, 0, spl[0], spl[1], 0, 0);
                     else {
                         console.warn('Invalid value', $this.val(), ' given. Time must be in the format hh:mm:ss.');
                         return;
@@ -128,18 +129,18 @@
                 date.setSeconds(0);
                 date.setMilliseconds(0);
 
-                var hours=date.getHours();
+                var hours = date.getHours();
 
                 // reset if out of range
                 if (hours < hoursMin)
-                    hours=hoursMin;
+                    hours = hoursMin;
                 else if (hours > hoursMax)
-                    hours=hoursMax;
+                    hours = hoursMax;
 
                 date.setHours(hours); // update
 
                 // ampm
-                dateIsPM=date.getHours() > 11;
+                dateIsPM = date.getHours() > 11;
 
                 if (dateIsPM)
                     $time_ap.addClass('jq-ci-t_ap--s');
@@ -151,14 +152,14 @@
                 $time_h.html(hours == 0 ? 12 : (hours - (hours > 12 ? 12 : 0)));
 
                 // hide out of range selections
-                for (var i=0; i < hoursMin; i++) {
+                for (var i = 0; i < hoursMin; i++) {
                     if (i >= 12 && dateIsPM)
                         hour_items[i - 12].addClass('jq-ci-hide');
                     else if (i < 12 && !dateIsPM)
                         hour_items[i].addClass('jq-ci-hide');
                 }
 
-                for (var i=hoursMax; i < 24; i++) {
+                for (var i = hoursMax; i < 24; i++) {
                     // if max is 6 but minutes are 40, we still need
                     // to show 6
                     if (i > (hoursMax + (minutesMax / 60))) {
@@ -172,13 +173,13 @@
                 }
 
                 // minutes
-                var minutes=Math.round(date.getMinutes() / 5) * 5; // round to nearest five
+                var minutes = Math.round(date.getMinutes() / 5) * 5; // round to nearest five
 
                 // contain bounds
                 if (hours == hoursMax && minutes > minutesMax)
-                    minutes=minutesMax;
+                    minutes = minutesMax;
                 else if (hours == hoursMin && minutes < minutesMin)
-                    minutes=minutesMin;
+                    minutes = minutesMin;
 
                 date.setMinutes(minutes); // update
 
@@ -188,7 +189,7 @@
 
                 // hide out of range selections
                 if (hours == hoursMax) {
-                    for (var i=minutesMax + 5 /* start hiding *after* max */; i < 60; i += 5) {
+                    for (var i = minutesMax + 5 /* start hiding *after* max */; i < 60; i += 5) {
                         minute_items[i / 5].addClass('jq-ci-hide');
                     }
                 }
@@ -196,28 +197,28 @@
                 // prev version has elseif here.
                 // this doesn't work if hoursMin == hoursMax
                 if (hours == hoursMin) {
-                    for (var i=0; i < minutesMin; i += 5) {
+                    for (var i = 0; i < minutesMin; i += 5) {
                         minute_items[i / 5].addClass('jq-ci-hide');
                     }
                 }
 
                 // update html input
-                var newVal=forceLength(date.getHours(), 2) + ":" + forceLength(date.getMinutes(), 2);
+                var newVal = forceLength(date.getHours(), 2) + ":" + forceLength(date.getMinutes(), 2);
 
                 if (newVal != $this.val())
                     $this.val(newVal).trigger('change');
             }
 
             // hours
-            var $hours=$('<div>', {'class': 'jq-ci-h'});
-            var hour_items=[];
+            var $hours = $('<div>', {'class': 'jq-ci-h'});
+            var hour_items = [];
             $parent.append($hours);
 
             $hours.on('click', 'span', function () {
-                var newHr=(Number)($(this).text());
+                var newHr = (Number)($(this).text());
 
                 if (newHr == 12)
-                    newHr=0;
+                    newHr = 0;
 
                 newHr += (dateIsPM ? 12 : 0);
 
@@ -228,16 +229,16 @@
 
             // add hours
             (function () {
-                for (var i=0; i < 12; i++) {
-                    var $kid=$('<span>', {'class': 'jq-ci-h_h jq-ci-h_h--' + i, html: (i == 0 ? 12 : i)});
+                for (var i = 0; i < 12; i++) {
+                    var $kid = $('<span>', {'class': 'jq-ci-h_h jq-ci-h_h--' + i, html: (i == 0 ? 12 : i)});
                     hour_items.push($kid);
                     $hours.append($kid);
                 }
             }());
 
             // minutes
-            var $minutes=$('<div>', {'class': 'jq-ci-m'});
-            var minute_items=[];
+            var $minutes = $('<div>', {'class': 'jq-ci-m'});
+            var minute_items = [];
             $parent.append($minutes);
 
             $minutes.on('click', 'span', function () {
@@ -247,8 +248,8 @@
 
             // add minutes
             (function () {
-                for (var i=0; i < 60; i += 5) {
-                    var $kid=$('<span>', {'class': 'jq-ci-m_m jq-ci-m_m--' + i, html: forceLength(i, 2)});
+                for (var i = 0; i < 60; i += 5) {
+                    var $kid = $('<span>', {'class': 'jq-ci-m_m jq-ci-m_m--' + i, html: forceLength(i, 2)});
                     minute_items.push($kid);
                     $minutes.append($kid);
                 }
